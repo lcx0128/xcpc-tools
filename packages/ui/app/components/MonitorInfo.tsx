@@ -76,9 +76,6 @@ export function MonitorInfo({
       setGroup('');
       setCamera('');
       setDesktop('');
-      monitor = {
-        ...monitor, name, group, camera, desktop,
-      };
     } catch (e) {
       console.error(e);
       notifications.show({ title: 'Error', message: 'Failed to add client', color: 'red' });
