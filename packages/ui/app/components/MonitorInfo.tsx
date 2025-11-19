@@ -82,7 +82,7 @@ export function MonitorInfo({
     }
     setUpdating(false);
     refresh();
-  };
+  }, [monitor._id, name, group, camera, desktop, refresh]);
 
   const sendRemoteCommand = async () => {
     setRemoteLoading(true);

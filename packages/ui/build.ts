@@ -120,17 +120,39 @@ logger.info('Building...');
     return;
   }
   function compilerCallback(err, stats: webpack.Stats) {
+    logger.info('Compiler callback called');
     if (err) {
-      logger.error(err.stack || err);
-      if (err.details) logger.error(err.details);
+      logger.error('Compilation error:', err.stack || err);
+      if (err.details) logger.error('Error details:', err.details);
       if (!watch && (!stats || stats.hasErrors())) process.exit(1);
     }
+    if (!stats) {
+      logger.error('No stats object received from webpack');
+      process.exit(1);
+    }
+    if (stats.hasErrors()) {
+      logger.error('Compilation has errors');
+      const info = stats.toJson();
+      logger.error(info.errors);
+      process.exit(1);
+    }
     if (argv.options.detail) logger.info(stats.toString());
-    if (!watch && (!stats || stats.hasErrors())) process.exit(1);
+    logger.info('Copying files...');
     fs.ensureDirSync(path.resolve(__dirname, '../server/data/'));
     fs.copyFileSync(path.resolve(__dirname, 'dist/main.js'), path.resolve(__dirname, '../server/data/static.frontend'));
     logger.info('Build finished, bundle size:', ((stats?.toJson().assets?.[0]?.size || 0) / 1024 / 1024).toFixed(2), 'MB');
   }
-  if (watch) compiler.watch({}, compilerCallback);
-  else compiler.run(compilerCallback);
+  if (watch) {
+    compiler.watch({}, compilerCallback);
+  } else {
+    await new Promise<void>((resolve, reject) => {
+      compiler.run((err, stats) => {
+        compilerCallback(err, stats);
+        compiler.close((closeErr) => {
+          if (closeErr) reject(closeErr);
+          else resolve();
+        });
+      });
+    });
+  }
 })();
