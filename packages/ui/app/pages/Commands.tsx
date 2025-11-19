@@ -17,7 +17,7 @@ export default function Commands() {
 
   // 新增: 执行结果详情弹窗状态
   const [resultModalOpened, setResultModalOpened] = useState(false);
-  const [resultDetails, setResultDetails] = useState({ success: 0, fail: 0, result: [], operation: '' });
+  const [resultDetails, setResultDetails] = useState<{ success: number, fail: number, result: any[], operation: string }>({ success: 0, fail: 0, result: [], operation: '' });
 
   const operation = async (op: string, withCommand = false) => {
     try {
@@ -27,7 +27,6 @@ export default function Commands() {
         body: JSON.stringify({
           operation: op,
           command: withCommand ? command : undefined,
-          ...(targetArray?.length && { target: targetArray }),
         }),
       })).json();
       if (res.error) {
@@ -180,8 +179,6 @@ export default function Commands() {
     }
   };
 
-  const load = query.isLoading || query.isFetching || query.isRefetching;
-
   return (
     <>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -223,7 +220,7 @@ export default function Commands() {
 
         <Divider my="md" label="高级选项" labelPosition="center" />
         
-        <Group position="apart" mb="xs">
+        <Group justify="space-between" mb="xs">
           <Text size="sm">启用高级模式</Text>
           <Switch 
             checked={advancedMode}
@@ -303,7 +300,7 @@ export default function Commands() {
             ? '您确定要锁定所有选手机屏幕吗？这将使所有选手暂时无法操作电脑。' 
             : '您确定要解锁所有选手机屏幕吗？这将使所有选手可以继续操作电脑。'}
         </Text>
-        <Group position="right">
+        <Group justify="flex-end">
           <Button variant="outline" onClick={() => setModalOpened(false)}>取消</Button>
           <Button 
             color={modalOperation === 'lock_screens' ? 'red' : 'green'}
@@ -347,7 +344,7 @@ export default function Commands() {
           </Alert>
         )}
         
-        <Group position="center">
+        <Group justify="center">
           <Button onClick={() => setResultModalOpened(false)}>关闭</Button>
         </Group>
       </Modal>
