@@ -9,7 +9,7 @@ import {
 } from '../utils';
 
 const randomHash = randomstring(8).toLowerCase();
-const buf = decodeBinary(StaticFrontend);
+const buf = decodeBinary(StaticFrontend, 'static.frontend');
 let registry: Registry;
 
 class StaticHandler extends Handler {

@@ -14,6 +14,7 @@ export type VoidReturn = Promise<any> | any;
 
 export interface PrintCodeDoc {
     _id: string;
+    id?: string;
     tid: string;
     team: string;
     location: string;

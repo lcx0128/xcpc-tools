@@ -76,16 +76,13 @@ export function MonitorInfo({
       setGroup('');
       setCamera('');
       setDesktop('');
-      monitor = {
-        ...monitor, name, group, camera, desktop,
-      };
     } catch (e) {
       console.error(e);
       notifications.show({ title: 'Error', message: 'Failed to add client', color: 'red' });
     }
     setUpdating(false);
     refresh();
-  };
+  }, [monitor._id, name, group, camera, desktop, refresh]);
 
   const sendRemoteCommand = async () => {
     setRemoteLoading(true);
