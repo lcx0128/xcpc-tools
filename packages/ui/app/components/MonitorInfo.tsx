@@ -46,6 +46,7 @@ export function MonitorInfo({
   const [group, setGroup] = useState(monitor.group || '');
   const [camera, setCamera] = useState(monitor.camera || '');
   const [desktop, setDesktop] = useState(monitor.desktop || '');
+  const wifiSignalText = formatWifiSignal(monitor.wifiSignal);
   const [remoteCmd, setRemoteCmd] = useState('');
   const [remotePort, setRemotePort] = useState(4567);
   const [remoteAuthKey, setRemoteAuthKey] = useState('BiGCIcPc');
